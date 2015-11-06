@@ -1,0 +1,6 @@
+A simple command line tool for turning binary files into C source code
+The output is an array of unsigned chars and is sent to stdout.
+I wrote this because sometimes it's convenient to have entire binary files
+encoded in your C source code instead of carrying around the data in a separate
+file.
+
