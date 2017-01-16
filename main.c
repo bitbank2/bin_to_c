@@ -10,12 +10,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 FILE * ihandle;
-void MakeC(char *, int);
+void MakeC(unsigned char *, int);
 
 int main(int argc, char *argv[])
 {
 int iSize, iData;
-char *p;
+unsigned char *p;
 
    if (argc != 2)
       {
@@ -34,7 +34,7 @@ char *p;
    fseek(ihandle, 0L, SEEK_END); // get the file size
    iSize = (int)ftell(ihandle);
    fseek(ihandle, 0, SEEK_SET);
-   p = (char *)malloc(0x10000); // allocate 64k to play with
+   p = (unsigned char *)malloc(0x10000); // allocate 64k to play with
    while (iSize)
       {
       iData = fread(p, 1, 0x10000, ihandle); // try to read 64k
@@ -46,7 +46,7 @@ char *p;
    return 0;
 } /* main() */
 
-void MakeC(char *p, int iLen)
+void MakeC(unsigned char *p, int iLen)
 {
 int i, j;
 char szTemp[256], szOut[256];
@@ -60,7 +60,7 @@ char szTemp[256], szOut[256];
          strcat(szOut, szTemp);
          }
       strcat(szOut, "\r\n");
-      printf(szOut);
+      printf("%s",szOut);
       }
    p += (iLen & 0xfff0); // point to last section
    if (iLen & 0xf) // any remaining characters?
@@ -72,6 +72,6 @@ char szTemp[256], szOut[256];
          strcat(szOut, szTemp);
          }
       strcat(szOut, "\r\n");
-      printf(szOut);
+      printf("%s",szOut);
       }
 } /* MakeC() */
