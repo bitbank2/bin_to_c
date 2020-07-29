@@ -40,8 +40,8 @@ char szLeaf[256];
    iSize = (int)ftell(ihandle);
    fseek(ihandle, 0, SEEK_SET);
    p = (unsigned char *)malloc(0x10000); // allocate 64k to play with
-   printf("//\n// %s\n//\n", argv[1]); // comment header with filename
    GetLeafName(argv[1], szLeaf);
+   printf("//\n// %s\n//\n", szLeaf); // comment header with filename
    printf("const uint8_t %s[] PROGMEM = {", szLeaf); // start of data array
    while (iSize)
    {
@@ -103,11 +103,7 @@ int i, iLen;
    iLen = strlen(fname);
    for (i=iLen-1; i>=0; i--)
       {
-#ifdef _WIN32
-      if (fname[i] == '\\')
-#else 
-      if (fname[i] == '/')
-#endif   
+      if (fname[i] == '\\' || fname[i] == '/') // Windows or Linux
          break;
       }
    strcpy(leaf, &fname[i+1]);
