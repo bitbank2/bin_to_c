@@ -15,6 +15,7 @@
 FILE * ihandle;
 void MakeC(unsigned char *, int, int);
 void GetLeafName(char *fname, char *leaf);
+void FixName(char *name);
 
 int main(int argc, char *argv[])
 {
@@ -42,6 +43,7 @@ char szLeaf[256];
    p = (unsigned char *)malloc(0x10000); // allocate 64k to play with
    GetLeafName(argv[1], szLeaf);
    printf("//\n// %s\n//\n", szLeaf); // comment header with filename
+   FixName(szLeaf); // remove unusable characters
    printf("const uint8_t %s[] PROGMEM = {", szLeaf); // start of data array
    while (iSize)
    {
@@ -54,7 +56,9 @@ char szLeaf[256];
    printf("};\n"); // final closing brace
    return 0;
 } /* main() */
-
+//
+// Generate C hex characters from each byte of file data
+//
 void MakeC(unsigned char *p, int iLen, int bLast)
 {
 int i, j, iCount;
@@ -95,7 +99,35 @@ char szTemp[256], szOut[256];
       printf("%s",szOut);
       }
 } /* MakeC() */
+//
+// Make sure the name can be used in C/C++ as a variable
+// replace invalid characters and make sure it starts with a letter
+//
+void FixName(char *name)
+{
+char c, *d, *s, szTemp[256];
+int i, iLen;
 
+   iLen = strlen(name);
+   d = szTemp;
+   s = name;
+   if (s[0] >= '0' && s[0] <= '9') // starts with a digit
+      *d++ = '_'; // Insert an underscore
+   for (i=0; i<iLen; i++)
+   {
+      c = *s++;
+      // these characters can't be in a variable name
+      if (c < ' ' || (c >= '!' && c < '0') || (c > 'Z' && c < 'a'))
+         c = '_'; // convert all to an underscore
+      *d++ = c;
+   }
+   *d++ = 0;
+   strcpy(name, szTemp);
+} /* FixName() */
+//
+// Trim off the leaf name from a fully
+// formed file pathname
+//
 void GetLeafName(char *fname, char *leaf)
 {
 int i, iLen;
