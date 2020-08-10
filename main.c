@@ -70,7 +70,7 @@ char szTemp[256], szOut[256];
       strcpy(szOut, "\t");
       for (j=0; j<16; j++)
       {
-         if (iCount == iLen-1) // last one, skip the comma
+         if (iCount == iLen-1 && bLast) // last one, skip the comma
             sprintf(szTemp, "0x%02x", p[(i*16)+j]);
          else
             sprintf(szTemp, "0x%02x,", p[(i*16)+j]);
@@ -87,7 +87,7 @@ char szTemp[256], szOut[256];
       strcpy(szOut, "\t");
       for (j=0; j<(iLen & 0xf); j++)
       {
-         if (iCount == iLen-1)
+         if (iCount == iLen-1 && bLast)
             sprintf(szTemp, "0x%02x", p[j]);
          else
             sprintf(szTemp, "0x%02x,", p[j]);
